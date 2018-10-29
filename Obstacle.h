@@ -9,8 +9,9 @@ private:
     int diametre, hauteur, x, y, PV;
 
 public:
-    Obstacle();
+    Obstacle(int, int, int, int, int);
     ~Obstacle();
+    virtual void print() = 0;
     virtual int getDiametre();
     virtual int getHauteur();
     virtual int getX();
