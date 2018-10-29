@@ -3,7 +3,7 @@ using namespace std;
 #include "Foret.h"
 #include <cmath>
 
-/*Foret::Foret() {
+Foret::Foret() {
     //this->l = new list();
 }
 
@@ -12,8 +12,8 @@ Foret::~Foret()  {cout << "liste detruite" << endl;}
 bool Foret::collision(Obstacle& O) {
     for (Obstacle o : this->l){
         double l; int dx, dy; // l = distance entre les deux obstacles
-        dx = o.getCentre().getx() - O.getCentre().getx();
-        dy = o.getCentre().gety() - O.getCentre().gety();
+        dx = o.getCentre()->getx() - O.getCentre()->getx();
+        dy = o.getCentre()->gety() - O.getCentre()->gety();
         l = sqrt(dx*dx + dy*dy);
         double l2 = (O.getDiametre()/2) + (o.getDiametre()/2);
         if (l < l2) return true;
@@ -30,4 +30,4 @@ void Foret::ajoute(Obstacle& O) {
 
 void Foret::supprime(Obstacle& O) {
 
-}*/
+}

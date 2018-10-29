@@ -6,7 +6,7 @@
 #include <list>
 
 class Foret {
-/*private:
+private:
     list<Obstacle> l;
 
 public:
@@ -15,6 +15,5 @@ public:
     bool collision(Obstacle&);
     void ajoute(Obstacle&);
     void supprime(Obstacle&);
-*/
 };
 #endif
