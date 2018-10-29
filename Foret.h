@@ -15,5 +15,6 @@ public:
     bool collision(Obstacle&);
     void ajoute(Obstacle&);
     void supprime(Obstacle&);
+    void afficher();
 };
 #endif

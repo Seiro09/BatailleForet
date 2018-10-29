@@ -3,11 +3,9 @@ using namespace std;
 #include "Foret.h"
 #include <cmath>
 
-Foret::Foret() {
-    //this->l = new list();
-}
+Foret::Foret() {}
 
-Foret::~Foret()  {cout << "liste detruite" << endl;}
+Foret::~Foret()  {/*cout << "liste detruite" << endl;*/}
 
 bool Foret::collision(Obstacle& O) {
     for (Obstacle o : this->l){
@@ -25,6 +23,12 @@ void Foret::ajoute(Obstacle& O) {
     if(this->collision(O)) cout << "collision, creation de l'obstacle impossible" << endl;
     else {
         this->l.push_back(O);
+    }
+}
+
+void Foret::afficher(){
+    for(Obstacle o : this->l) {
+        o.print();
     }
 }
 

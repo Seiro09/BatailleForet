@@ -5,18 +5,21 @@
 #define OBSTACLE_H
 
 #include "Point.h"
+#include <string>
 
 class Obstacle {
 private:
     int diametre, hauteur, PV;
     Point* centre; // utilisation de la classe Point ecrite en td
+    string nom;
 public:
-    Obstacle(int, int, int, int, int);
+    Obstacle(int, int, int, int, int, string);
     ~Obstacle();
     virtual void print();
     virtual int getDiametre();
     virtual int getHauteur();
     virtual Point* getCentre();
     virtual int getPV();
+    virtual string getNom();
 };
 #endif
