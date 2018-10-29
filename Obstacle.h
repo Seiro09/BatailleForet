@@ -11,7 +11,7 @@ private:
 public:
     Obstacle(int, int, int, int, int);
     ~Obstacle();
-    virtual void print() = 0;
+    virtual void print();
     virtual int getDiametre();
     virtual int getHauteur();
     virtual int getX();

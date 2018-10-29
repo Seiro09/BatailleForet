@@ -9,5 +9,5 @@ Arbre::~Arbre(){}
 
 void Arbre::print(){
     cout << "Je suis un arbre et voici mes caracteristiques : " << endl;
-    cout << "- diametre : " << this->getDiametre() << endl;
+    Obstacle::print();
 }

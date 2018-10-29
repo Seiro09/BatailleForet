@@ -3,7 +3,13 @@
 
 #include "Obstacle.h"
 
-class Rocher {
+//La classe Rocher hérite de la classe Obstacle
+class Rocher : public Obstacle {
+private:
 
+public:
+    Rocher(int, int, int, int, int);
+    ~Rocher();
+    void print();
 };
 #endif

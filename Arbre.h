@@ -3,6 +3,7 @@
 
 #include "Obstacle.h"
 
+//La classe Arbre hérite de la classe Obstacle
 class Arbre : public Obstacle {
 private:
 

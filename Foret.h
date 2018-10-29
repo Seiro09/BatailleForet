@@ -1,7 +1,10 @@
 #ifndef FORET_H
 #define FORET_H
 
-class Foret {
+#include "Arbre.h"
+#include "Rocher.h"
+
+class Foret : public Arbre, public Rocher {
 
 };
 #endif
