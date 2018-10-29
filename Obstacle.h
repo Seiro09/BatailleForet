@@ -4,18 +4,19 @@
 #ifndef OBSTACLE_H
 #define OBSTACLE_H
 
-class Obstacle{
-private:
-    int diametre, hauteur, x, y, PV;
+#include "Point.h"
 
+class Obstacle {
+private:
+    int diametre, hauteur, PV;
+    Point* centre; // utilisation de la classe Point ecrite en td
 public:
     Obstacle(int, int, int, int, int);
     ~Obstacle();
     virtual void print();
     virtual int getDiametre();
     virtual int getHauteur();
-    virtual int getX();
-    virtual int getY();
+    virtual Point* getCentre();
     virtual int getPV();
 };
 #endif

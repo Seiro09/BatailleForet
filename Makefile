@@ -1,8 +1,8 @@
 all: main
 	./main
 
-main: Main.o Foret.o Rocher.o Arbre.o Obstacle.o
-	g++ Main.o Foret.o Rocher.o Arbre.o Obstacle.o -o main
+main: Main.o Foret.o Rocher.o Arbre.o Obstacle.o Point.o
+	g++ Main.o Foret.o Rocher.o Arbre.o Obstacle.o Point.o -o main
 
 Main.o: Main.cc Foret.cc Foret.h
 	g++ Main.cc -c
@@ -16,9 +16,12 @@ Rocher.o: Rocher.cc Rocher.h Obstacle.h
 Arbre.o: Arbre.cc Arbre.h Obstacle.h
 	g++ Arbre.cc -c
 
-Obstacle.o: Obstacle.cc Obstacle.h
+Obstacle.o: Obstacle.cc Point.h
 	g++ Obstacle.cc -c
 
+Point.o: Point.cc
+	g++ Point.cc -c
+
 clean:
-	rm -f *.o;
+	rm -f *.o
 	rm -f main

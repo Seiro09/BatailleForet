@@ -3,8 +3,18 @@
 
 #include "Arbre.h"
 #include "Rocher.h"
+#include <list>
 
-class Foret : public Arbre, public Rocher {
+class Foret {
+/*private:
+    list<Obstacle> l;
 
+public:
+    Foret();
+    ~Foret();
+    bool collision(Obstacle&);
+    void ajoute(Obstacle&);
+    void supprime(Obstacle&);
+*/
 };
 #endif
