@@ -4,19 +4,19 @@ using namespace std;
 #include "Obstacle.h"
 
 Obstacle::Obstacle(int d, int h, int x, int y, int PV){
-    this->diametre=d;
-    this->hauteur=h;
-    this->x=x;
-    this->y=y;
-    this->PV=PV;
+    this->diametre = d;
+    this->hauteur = h;
+    this->x = x;
+    this->y = y;
+    this->PV = PV;
 }
 
 Obstacle::~Obstacle(){
     cout << "Cet obstacle a été detruit" << endl;
 }
 
-virtual int getDiametre(){return this->diametre;}
-virtual int getHauteur(){return this->hauteur;}
-virtual int getX(){return this->x;}
-virtual int getY(){return this->y;}
-virtual int getPV(){return this->PV;}
+int Obstacle::getDiametre(){return this->diametre;}
+int Obstacle::getHauteur(){return this->hauteur;}
+int Obstacle::getX(){return this->x;}
+int Obstacle::getY(){return this->y;}
+int Obstacle::getPV(){return this->PV;}
