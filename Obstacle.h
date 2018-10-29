@@ -3,12 +3,12 @@
 
 class Obstacle{
 private:
-  
+
 public:
   Obstacle();
   ~Obstacle();
 
-
+/*CECI EST UN TEST COMENTAIRE*/
 
 };
 
