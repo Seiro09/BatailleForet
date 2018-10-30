@@ -3,6 +3,8 @@ using namespace std;
 #include <iostream>
 #include "Obstacle.h"
 
+Obstacle::Obstacle(){}
+
 Obstacle::Obstacle(int d, int h, int x, int y, int PV, string nom){
     this->diametre = d;
     this->hauteur = h;
