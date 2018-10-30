@@ -32,6 +32,10 @@ void Foret::afficher(){
     }
 }
 
-void Foret::supprime(Obstacle& O) {
-
+void Foret::supprime(int x, int y) {
+    for(Obstacle o : this->l) {
+        if((o.getx() == x)&&(o.gety() == y)) {
+            //supprimer de la liste
+        }
+    }
 }

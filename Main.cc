@@ -18,5 +18,5 @@ int main() {
     Arbre a2(2,4,6,8,10);
     f1.ajoute(a2);
     f1.afficher();
-    //f1.supprime()
+    f1.supprime()
 }
