@@ -14,7 +14,7 @@ public:
     ~Foret();
     bool collision(Obstacle&);
     void ajoute(Obstacle&);
-    void supprime(Obstacle&);
+    void supprime(int, int);
     void afficher();
 };
 #endif
