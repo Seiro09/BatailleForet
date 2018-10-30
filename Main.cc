@@ -18,6 +18,6 @@ int main() {
     Arbre a2(2, 4, 6, 8, 10);
     f1.ajoute(a2);
     f1.afficher();
-    f1.supprime(5, 5);
+    f1.supprime(3, 4);
     f1.afficher();
 }
