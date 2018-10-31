@@ -1,7 +1,4 @@
-using namespace std;
-#include <iostream>
 #include "Arbre.h"
-
 
 Arbre::Arbre(int d, int h, int x, int y, int PV) : Obstacle(d,h,x,y,PV, "Arbre") {}
 

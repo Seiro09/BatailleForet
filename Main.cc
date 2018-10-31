@@ -1,15 +1,19 @@
 using namespace std;
 #include <iostream>
 #include "Foret.h"
-#include <fstream>
 
 int main() {
+    string fichier;
     Foret f;
-    f.creerNiveau();
+    f.editerNiveau();
     cout << endl;
     f.afficher();
-    f.sauvegarde("Foret");
-    f.lecture("Foret");
+    cout << "Donner un fichier a ouvrir : ";
+    cin >> fichier;
+    f.lecture(fichier);
     cout << endl;
+    f.afficher();
+    f.editerNiveau();
+    cout << "Nouveau niveau :" << endl << endl;
     f.afficher();
 }

@@ -1,8 +1,6 @@
 using namespace std;
 #include <iostream>
 #include "Foret.h"
-#include <cmath>
-#include <string>
 
 Foret::Foret() {}
 
@@ -37,17 +35,17 @@ void Foret::supprime(int x, int y) {
     this->l.remove_if([x, y](Obstacle o){return ((o.getCentre()->getx()==x) && (o.getCentre()->gety()==y));});
 }
 
-void Foret::creerNiveau() {
-    Obstacle* o[100]; // on limite le nombre d'obstacle a 100
+void Foret::editerNiveau() {
     int i = 0;
     string s;
-    cout << "Tapez c pour commencer a creer des obstacles, q sinon ";
+    cout << "Tapez c pour creer (ou s pour supprimer) des obstacles, q sinon ";
     cin >> s;
     while(s != "q") {
         if(s == "c") { // bloc creation d'un obstacle
+        Obstacle* o;
             int d, h, x, y, PV;
             string nom;
-            cout << "Quel obstacle voulez-vous creer? {Arbre, Rocher} ";
+            cout << "Quel obstacle voulez-vous creer? {Arbre, Rocher, Buisson, Lac} ";
             cin >> nom;
             cout << "Quel est son diametre? ";
             cin >> d;
@@ -60,18 +58,24 @@ void Foret::creerNiveau() {
             cout << "Qel est son nombre de PV? ";
             cin >> PV;
             if(nom == "Arbre") {
-                o[i] = new Arbre(d, h, x, y, PV);
-                this->ajoute(*o[i]);
-                i++;
+                o = new Arbre(d, h, x, y, PV);
+                this->ajoute(*o);
             }
             else if(nom == "Rocher") {
-                o[i] = new Rocher(d, h, x, y, PV);
-                this->ajoute(*o[i]);
-                i++;
+                o = new Rocher(d, h, x, y, PV);
+                this->ajoute(*o);
+            }
+            else if(nom == "Buisson") {
+                o = new Buisson(d, h, x, y, PV);
+                this->ajoute(*o);
+            }
+            else if(nom == "Lac") {
+                o = new Lac(d, h, x, y, PV);
+                this->ajoute(*o);
             }
             else cout << "Cet obstacle n'existe pas" << endl;
         }
-        if(s == "s") {
+        if(s == "s") { // bloc de suppression d'un obstacle
             this->afficher();
             int x, y;
             cout << "Donnez les coordonnees de l'obstacle a supprimer" << endl << "x = ";
@@ -80,15 +84,15 @@ void Foret::creerNiveau() {
             cin >> y;
             this->supprime(x, y);
         }
-        if(i == 100) {
-            cout << "Nombre d'obstacle maximum atteint" << endl;
-            break;
-        }
         cout << "Tapez c pour continuer a creer des obstacles, s pour en supprimer un, q sinon ";
         cin >> s;
         cout << endl;
     }
     this->afficher();
+    string fichier;
+    cout << "Donner un nom pour le fichier de sauvegarde : ";
+    cin >> fichier;
+    this->sauvegarde(fichier);
 }
 
 void Foret::sauvegarde(string nom) {

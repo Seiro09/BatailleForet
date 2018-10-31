@@ -1,5 +1,3 @@
-using namespace std;
-#include <iostream>
 #include "Rocher.h"
 
 Rocher::Rocher(int d, int h, int x, int y, int PV) : Obstacle(d,h,x,y, 2*PV, "Rocher") {}

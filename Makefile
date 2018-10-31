@@ -1,14 +1,20 @@
 all: main
 	./main
 
-main: Main.o Foret.o Rocher.o Arbre.o Obstacle.o Point.o
-	g++ Main.o Foret.o Rocher.o Arbre.o Obstacle.o Point.o -o main -lboost_serialization
+main: Main.o Foret.o Lac.o Buisson.o Rocher.o Arbre.o Obstacle.o Point.o
+	g++ Main.o Foret.o Lac.o Buisson.o Rocher.o Arbre.o Obstacle.o Point.o -o main -lboost_serialization
 
 Main.o: Main.cc Foret.cc Foret.h
 	g++ Main.cc -c
 
-Foret.o: Foret.cc Foret.h Rocher.h Arbre.h
+Foret.o: Foret.cc Foret.h Rocher.h Arbre.h Buisson.h Lac.h
 	g++ Foret.cc -c
+
+Lac.o: Lac.cc Lac.h Obstacle.h
+	g++ Lac.cc -c
+
+Buisson.o: Buisson.cc Buisson.h Obstacle.h
+	g++ Buisson.cc -c
 
 Rocher.o: Rocher.cc Rocher.h Obstacle.h
 	g++ Rocher.cc -c
@@ -25,8 +31,3 @@ Point.o: Point.cc
 clean:
 	rm -f *.o
 	rm -f main
-
-cleanAll:
-	rm -f *.o
-	rm -f main
-	rm -f Foret

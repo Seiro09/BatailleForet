@@ -3,8 +3,13 @@
 
 #include "Arbre.h"
 #include "Rocher.h"
+#include "Buisson.h"
+#include "Lac.h"
 #include <list>
 #include <boost/serialization/list.hpp>
+#include <cmath>
+#include <string>
+#include <fstream>
 
 class Foret {
 private:
@@ -22,7 +27,7 @@ public:
     void ajoute(Obstacle&);
     void supprime(int, int);
     void afficher();
-    void creerNiveau();
+    void editerNiveau();
     void sauvegarde(string);
     void lecture(string);
 };
