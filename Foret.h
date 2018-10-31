@@ -22,7 +22,7 @@ public:
     void ajoute(Obstacle&);
     void supprime(int, int);
     void afficher();
-    //void creerNiveau();
+    void creerNiveau();
     void sauvegarde(string);
     void lecture(string);
 };
