@@ -90,7 +90,7 @@ void Foret::editerNiveau() {
     }
     this->afficher();
     string fichier;
-    cout << "Donner un nom pour le fichier de sauvegarde : ";
+    cout << "Donner un nom pour le fichier de sauvegarde (finir par .txt) : ";
     cin >> fichier;
     this->sauvegarde(fichier);
 }

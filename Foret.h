@@ -9,6 +9,7 @@
 #include <boost/serialization/list.hpp>
 #include <cmath>
 #include <string>
+#include <string.h>
 #include <fstream>
 
 class Foret {
