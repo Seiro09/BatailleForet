@@ -2,7 +2,9 @@ using namespace std;
 #include <iostream>
 #include "Foret.h"
 
-Foret::Foret() {}
+Foret::Foret() {
+    this->Centre=new Point(TAILLE_FORET/2,TAILLE_FORET/2);
+}
 
 Foret::~Foret()  {/*cout << "liste detruite" << endl;*/}
 

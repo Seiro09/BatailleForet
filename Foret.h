@@ -12,9 +12,12 @@
 #include <string.h>
 #include <fstream>
 
+#define TAILLE_FORET 750
+
 class Foret {
 private:
     list<Obstacle> l;
+    Point* Centre;
 
     friend class boost::serialization::access;
     template<class Archive>
