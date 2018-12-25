@@ -6,7 +6,7 @@
 //La classe Arbre hérite de la classe Obstacle
 class Arbre : public Obstacle {
 public:
-    Arbre(int, int, int, int, int);
+    Arbre(int, int, int, int);
     ~Arbre();
     void print();
 };

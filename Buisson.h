@@ -6,7 +6,7 @@
 //La classe Buisson hérite de la classe Obstacle
 class Buisson : public Obstacle {
 public:
-    Buisson(int, int, int, int, int);
+    Buisson(int, int, int, int);
     ~Buisson();
     void print();
 };

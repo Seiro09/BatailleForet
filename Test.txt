@@ -1,0 +1,5 @@
+22 serialization::archive 14 0 0 0 0 4 0 0 0 15 3 1 0
+0 75 50 64 5 Arbre 115 3
+1 75 100 128 6 Rocher 30 3
+2 300 350 32 7 Buisson 0 3
+3 450 475 2147483647 3 Lac

@@ -26,54 +26,6 @@ void Nouvelle_Partie(RenderWindow& window) {
     }
 }
 
-void Edition_Nouvelle_Foret(){
-    RenderWindow window(VideoMode(TAILLE_FORET,TAILLE_FORET),
-     "Edition Foret");
-     Foret f;
-     int type =0;
-     CircleShape objet;
-    while(window.isOpen()){
-        Event event;
-        while (window.pollEvent(event)){
-            switch (event.type) {
-                case Event::Closed:
-                    window.close();
-                    break;
-            }
-            if (Mouse::isButtonPressed(Mouse::Left)){
-                objet.setRadius(10);
-                objet.setPosition(event.mouseButton.x,event.mouseButton.y);
-                //objet.setOrigin(objet.getPosition().x+10,objet.getPosition().y+10);
-                type+=1;
-                switch (type) {
-                    case 1:
-                        objet.setFillColor(Color::Red);
-                        break;
-                    case 2:
-                        objet.setFillColor(Color::Green);
-                        break;
-                    case 3:
-                        objet.setFillColor(Color::Blue);
-                        break;
-                    case 4:
-                        objet.setFillColor(Color::Yellow);
-                        break;
-                    default:
-                        type=0;
-                        break;
-                }
-            }
-            if (Mouse::isButtonPressed(Mouse::Right)){
-                
-            }
-        }
-
-        window.clear();
-        window.draw(objet);
-        window.display();
-    }
-}
-
 void Disclaimer_Edition(){
     RenderWindow window(VideoMode(TAILLE_FORET,200),
      "Edition Foret");
@@ -269,7 +221,7 @@ int main() {
             texture2.setSmooth(true);
             if (Mouse::isButtonPressed(Mouse::Left)){
                 //Création nouveau niveau
-                Edition_Nouvelle_Foret();
+                f.Edition_Nouvelle_Foret();
             }
             if (Mouse::isButtonPressed(Mouse::Right)){
                 //Edition niveau existant
@@ -322,6 +274,8 @@ int main() {
         window.draw(shapeQJ);
         window.display();
     }
+    // Foret f;
+    // string fichier;
     // f.editerNiveau();
     // cout << endl;
     // f.afficher();

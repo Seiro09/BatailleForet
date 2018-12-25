@@ -8,21 +8,20 @@
 
 class Obstacle {
 private:
-    int diametre, hauteur, PV;
+    int hauteur, PV;
     Point* centre; // utilisation de la classe Point ecrite en td
     string nom;
 
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive& ar, const unsigned int version){
-        ar & diametre & hauteur & centre & PV & nom;
+        ar & hauteur & centre & PV & nom;
     }
 public:
     Obstacle();
-    Obstacle(int, int, int, int, int, string);
+    Obstacle(int, int, int, int, string);
     ~Obstacle();
     virtual void print();
-    virtual int getDiametre();
     virtual int getHauteur();
     virtual Point* getCentre();
     virtual int getPV();

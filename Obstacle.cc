@@ -5,8 +5,7 @@ using namespace std;
 
 Obstacle::Obstacle(){}
 
-Obstacle::Obstacle(int d, int h, int x, int y, int PV, string nom){
-    this->diametre = d;
+Obstacle::Obstacle(int h, int x, int y, int PV, string nom){
     this->hauteur = h;
     this->centre = new Point(x, y);
     this->PV = PV;
@@ -17,7 +16,6 @@ Obstacle::~Obstacle(){
     /*cout << "Cet obstacle a été detruit" << endl;*/
 }
 
-int Obstacle::getDiametre(){return this->diametre;}
 int Obstacle::getHauteur(){return this->hauteur;}
 Point* Obstacle::getCentre(){return this->centre;}
 int Obstacle::getPV(){return this->PV;}
@@ -25,8 +23,7 @@ string Obstacle::getNom() {return this->nom;}
 
 void Obstacle::print(){
     cout << this->getNom() << " : ";
-    cout << "Diametre : " << this->getDiametre();
-    cout << " | Hauteur : " << this->getHauteur();
+    cout << "Hauteur : " << this->getHauteur();
     cout << " | Position : " << "(" << this->getCentre()->getx() << "," << this->getCentre()->gety() << ")";
     cout << " | PV : " << this->getPV() << endl;
 }
