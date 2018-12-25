@@ -20,7 +20,6 @@
 class Foret {
 private:
     list<Obstacle> l;
-    int T[NB_CASES][NB_CASES];
     Point* Centre;
 
     friend class boost::serialization::access;
@@ -31,6 +30,7 @@ private:
 public:
     Foret();
     ~Foret();
+    int T[NB_CASES][NB_CASES];
     bool collision(Obstacle&);
     void ajoute(Obstacle&);
     void supprime(int, int);
@@ -40,5 +40,7 @@ public:
     void sauvegarde(string);
     void lecture(string);
     void Edition_Nouvelle_Foret();
+    void Edition_Foret_Existante();
+    //int** getTab();
 };
 #endif

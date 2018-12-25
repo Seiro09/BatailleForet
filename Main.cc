@@ -9,9 +9,49 @@ using namespace sf;
 //Découper le code (pas mon travail)
 //Créer l'interface de jeu juste après les menus
 
-void Nouvelle_Partie(RenderWindow& window) {
+void Nouvelle_Partie(RenderWindow& window, Foret f) {
     window.clear();
     window.create(VideoMode(TAILLE_FORET,TAILLE_FORET), "Nouvelle Partie");
+    string fichier;
+    cin >> fichier;
+    f.lecture(fichier);
+    vector<RectangleShape> v;
+    RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
+    for(int i = 0; i<NB_CASES; i++){
+        for(int j = 0; j<NB_CASES; j++){
+            switch (f.T[i][j]) {
+                case 1:
+                r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
+                r2.setFillColor(Color::Green);
+                v.push_back(r2);
+                break;
+                case 2:
+                //RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
+                r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
+                r2.setFillColor(Color::Yellow);
+                v.push_back(r2);
+                break;
+                case 3:
+                //RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
+                r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
+                r2.setFillColor(Color::Red);
+                v.push_back(r2);
+                break;
+                case 4:
+                //RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
+                r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
+                r2.setFillColor(Color::Blue);
+                v.push_back(r2);
+                break;
+                case 5:
+                //Personnage
+                break;
+                default:
+                //case vide
+                break;
+            }
+        }
+    }
     while(window.isOpen()){
         Event event;
         while (window.pollEvent(event)){
@@ -22,6 +62,7 @@ void Nouvelle_Partie(RenderWindow& window) {
             }
         }
         window.clear();
+        for(auto o : v) window.draw(o);
         window.display();
     }
 }
@@ -62,12 +103,6 @@ void Disclaimer_Edition(){
         window.draw(shapeO);
         window.display();
 }
-}
-
-void Edition_Foret_Existante(){
-
-
-
 }
 
 void Regles_du_Jeu(){
@@ -210,7 +245,7 @@ int main() {
             shapeNP.setTexture(&texture1);
             texture1.setSmooth(true);
             if (Mouse::isButtonPressed(Mouse::Left)){
-                Nouvelle_Partie(window);
+                Nouvelle_Partie(window,f);
                 //montrer les niveaux déja crées
             }
         }
@@ -225,7 +260,7 @@ int main() {
             }
             if (Mouse::isButtonPressed(Mouse::Right)){
                 //Edition niveau existant
-                Edition_Foret_Existante();
+                f.Edition_Foret_Existante();
             }
         }
         else if (shapeRDJ.getGlobalBounds().contains(window.mapPixelToCoords(Mouse::getPosition(window)))){

@@ -14,6 +14,7 @@ Foret::Foret() {
 
 Foret::~Foret()  {/*cout << "liste detruite" << endl;*/}
 
+//int** Foret::getTab(){return T;}
 bool Foret::collision(Obstacle& O) {
     for (Obstacle o : this->l){
         // double l; int dx, dy; // l = distance entre les deux obstacles
@@ -144,9 +145,8 @@ void Foret::lecture(string nom) {
 
 void Foret::Edition_Nouvelle_Foret(){
     RenderWindow window(VideoMode(TAILLE_FORET,TAILLE_FORET),
-     "Edition Foret");
-    int type=0;
-    //RectangleShape r(Vector2f(TAILLE_CASE,TAILLE_CASE));
+     "Edition Nouvelle Foret");
+
     vector<RectangleShape> v;
     VertexArray lines(Lines,4*NB_CASES);
     for (int i = 0; i<NB_CASES; i++){
@@ -166,6 +166,42 @@ void Foret::Edition_Nouvelle_Foret(){
         while (window.pollEvent(event)){
             switch (event.type) {
                 case Event::Closed:
+                Obstacle* o;
+                for(int i = 0; i<NB_CASES; i++){
+                    for(int j = 0; j<NB_CASES; j++){
+                        switch (this->T[i][j]) {
+                            case 1:
+                            o = new Arbre(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
+                            this->ajoute(*o);
+                            break;
+                            case 2:
+                            o = new Buisson(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
+                            this->ajoute(*o);
+                            break;
+                            case 3:
+                            o = new Rocher(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
+                            this->ajoute(*o);
+                            break;
+                            case 4:
+                            o = new Lac(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
+                            this->ajoute(*o);
+                            break;
+                            case 5:
+                            //Personnage
+                            break;
+                            default:
+                            //case vide
+                            break;
+                        }
+                    }
+                }
+                if (!(this->l.empty())) {
+                    string fichier;
+                    //this->afficher();
+                    cin >> fichier;
+                    if (!cin) window.close();
+                    this->sauvegarde(fichier);
+                }
                     window.close();
                     break;
             }
@@ -238,58 +274,13 @@ void Foret::Edition_Nouvelle_Foret(){
                         }
             }
         }
-        for (int i = 0; i<NB_CASES; i++){
-            for (int j = 0; j<NB_CASES; j++){
-                cout << T[i][j];
-            }
-            cout << endl;
-        }
-        // for(int i = 0; i<NB_CASES; i++){
-        //     for(int j = 0; j<NB_CASES; j++){
-        //         r.setOrigin(i*TAILLE_CASE,j*TAILLE_CASE);
-        //         r.setPosition(i*TAILLE_CASE,j*TAILLE_CASE);
-        //         r.setFillColor(Color::Green);
-        //         v.push_back(r);
-        //         switch (this->T[i][j]) {
-        //             case 1:
-        //             r.setOrigin(i*TAILLE_CASE,j*TAILLE_CASE);
-        //             r.setPosition(i*TAILLE_CASE,j*TAILLE_CASE);
-        //             r.setFillColor(Color::Green);
-        //             v.push_back(r);
-        //             break;
-        //             case 2:
-        //             r.setOrigin(i*TAILLE_CASE,j*TAILLE_CASE);
-        //             r.setPosition(i*TAILLE_CASE,j*TAILLE_CASE);
-        //             r.setFillColor(Color::Red);
-        //             v.push_back(r);
-        //             break;
-        //             case 3:
-        //             r.setOrigin(i*TAILLE_CASE,j*TAILLE_CASE);
-        //             r.setPosition(i*TAILLE_CASE,j*TAILLE_CASE);
-        //             r.setFillColor(Color::Yellow);
-        //             v.push_back(r);
-        //             break;
-        //             case 4:
-        //             r.setOrigin(i*TAILLE_CASE,j*TAILLE_CASE);
-        //             r.setPosition(i*TAILLE_CASE,j*TAILLE_CASE);
-        //             r.setFillColor(Color::Blue);
-        //             v.push_back(r);
-        //             break;
-        //             case 5:
-        //             r.setOrigin(i*TAILLE_CASE,j*TAILLE_CASE);
-        //             r.setPosition(i*TAILLE_CASE,j*TAILLE_CASE);
-        //             r.setFillColor(Color::White);
-        //             v.push_back(r);
-        //             break;
-        //             default:
-        //             r.setOrigin(i*TAILLE_CASE,j*TAILLE_CASE);
-        //             r.setPosition(i*TAILLE_CASE,j*TAILLE_CASE);
-        //             r.setFillColor(Color::Black);
-        //             v.push_back(r);
-        //             break;
-        //         }
+        // for (int i = 0; i<NB_CASES; i++){
+        //     for (int j = 0; j<NB_CASES; j++){
+        //         cout << T[i][j];
         //     }
+        //     cout << endl;
         // }
+
 
         for(auto o : v) window.draw(o);
         //cout << v.size() << endl;
@@ -297,4 +288,188 @@ void Foret::Edition_Nouvelle_Foret(){
         window.display();
         window.clear();
     }
+}
+
+void Foret::Edition_Foret_Existante(){
+    RenderWindow window(VideoMode(TAILLE_FORET,TAILLE_FORET),
+     "Edition Foret Existante");
+    string fichier;
+    cin >> fichier;
+    this->lecture(fichier);
+    this->l.clear();
+    vector<RectangleShape> v;
+    VertexArray lines(Lines,4*NB_CASES);
+    for (int i = 0; i<NB_CASES; i++){
+        lines[2*i].position = sf::Vector2f(i*TAILLE_CASE, 0);
+        lines[2*i+1].position = sf::Vector2f(i*TAILLE_CASE, TAILLE_FORET);
+        lines[2*i].color = sf::Color::White;
+        lines[2*i+1].color = sf::Color::White;
+    }
+    for (int i = 0; i <NB_CASES; i++){
+        lines[2*NB_CASES+2*i].position = sf::Vector2f(0,i*TAILLE_CASE);
+        lines[2*NB_CASES+2*i+1].position = sf::Vector2f(TAILLE_FORET,i*TAILLE_CASE);
+        lines[2*NB_CASES+2*i].color = sf::Color::White;
+        lines[2*NB_CASES+2*i+1].color = sf::Color::White;
+    }
+    //charger le terrain
+    RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
+    for(int i = 0; i<NB_CASES; i++){
+        for(int j = 0; j<NB_CASES; j++){
+            switch (this->T[i][j]) {
+                case 1:
+                r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
+                r2.setFillColor(Color::Green);
+                v.push_back(r2);
+                break;
+                case 2:
+                //RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
+                r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
+                r2.setFillColor(Color::Yellow);
+                v.push_back(r2);
+                break;
+                case 3:
+                //RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
+                r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
+                r2.setFillColor(Color::Red);
+                v.push_back(r2);
+                break;
+                case 4:
+                //RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
+                r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
+                r2.setFillColor(Color::Blue);
+                v.push_back(r2);
+                break;
+                case 5:
+                //Personnage
+                break;
+                default:
+                //case vide
+                break;
+            }
+        }
+    }
+    while(window.isOpen()){
+        Event event;
+        while (window.pollEvent(event)){
+            switch (event.type) {
+                case Event::Closed:
+                Obstacle* o;
+                for(int i = 0; i<NB_CASES; i++){
+                    for(int j = 0; j<NB_CASES; j++){
+                        switch (this->T[i][j]) {
+                            case 1:
+                            o = new Arbre(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
+                            this->ajoute(*o);
+                            break;
+                            case 2:
+                            o = new Buisson(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
+                            this->ajoute(*o);
+                            break;
+                            case 3:
+                            o = new Rocher(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
+                            this->ajoute(*o);
+                            break;
+                            case 4:
+                            o = new Lac(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
+                            this->ajoute(*o);
+                            break;
+                            case 5:
+                            //Personnage
+                            break;
+                            default:
+                            //case vide
+                            break;
+                        }
+                    }
+                }
+                if (!(this->l.empty())) {
+                    this->sauvegarde(fichier);
+                }
+                    window.close();
+                    break;
+            }
+            if (Mouse::isButtonPressed(Mouse::Left) && window.hasFocus()) {
+                bool existe = false;
+                sf::Vector2i localPosition = sf::Mouse::getPosition(window);
+                //cout << localPosition.x << " "<< localPosition.y << endl;
+                if (localPosition.x < TAILLE_FORET && localPosition.x > 0 &&
+                    localPosition.y < TAILLE_FORET && localPosition.y > 0) {
+                        for(int i = 0; i<v.size();i++){
+                            if (v[i].getPosition()==
+                            Vector2f(localPosition.x/TAILLE_CASE*TAILLE_CASE,
+                                localPosition.y/TAILLE_CASE*TAILLE_CASE)){
+                                    Vector2f pos = v[i].getPosition();
+                                    this->T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]++;
+                                    switch (T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]) {
+                                        case 1:
+                                            v[i].setFillColor(Color::Green);
+                                            break;
+                                        case 2:
+                                            v[i].setFillColor(Color::Yellow);
+                                            break;
+                                        case 3:
+                                            v[i].setFillColor(Color::Red);
+                                            break;
+                                        case 4:
+                                            v[i].setFillColor(Color::Blue);
+                                            break;
+                                        default:
+                                            T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]=1;
+                                            v[i].setFillColor(Color::Green);
+                                            break;
+                                    }
+                                    existe=true;
+                                }
+                            }
+                if (!existe){
+                    RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
+                    r2.setPosition((localPosition.x/TAILLE_CASE)*TAILLE_CASE,(localPosition.y/TAILLE_CASE)*TAILLE_CASE);
+                    r2.setFillColor(Color::Green);
+                    v.push_back(r2);
+                    this->T[localPosition.y/TAILLE_CASE][localPosition.x/TAILLE_CASE]=1;
+                }
+            }
+            }
+            if (Mouse::isButtonPressed(Mouse::Middle) && window.hasFocus()){
+                v.clear();
+                for (int i = 0; i<NB_CASES; i++){
+                    for (int j = 0; j<NB_CASES; j++){
+                        T[i][j]=0;
+                    }
+                }
+                // sf::Vector2i localPosition = sf::Mouse::getPosition(window);
+                // this->T[localPosition.x/TAILLE_CASE][localPosition.y/TAILLE_CASE]=0;
+            }
+            if (Mouse::isButtonPressed(Mouse::Right)) {
+                sf::Vector2i localPosition = sf::Mouse::getPosition(window);
+                if (localPosition.x < TAILLE_FORET && localPosition.x > 0 &&
+                    localPosition.y < TAILLE_FORET && localPosition.y > 0) {
+                        for(int i = 0; i<v.size();i++){
+                            if (v[i].getPosition()==
+                            Vector2f(localPosition.x/TAILLE_CASE*TAILLE_CASE,
+                                localPosition.y/TAILLE_CASE*TAILLE_CASE)){
+                                    Vector2f pos = v[i].getPosition();
+                                    this->T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]=0;
+                                    v.erase(v.begin()+i);
+                                }
+                            }
+                        }
+            }
+        }
+        // for (int i = 0; i<NB_CASES; i++){
+        //     for (int j = 0; j<NB_CASES; j++){
+        //         cout << T[i][j];
+        //     }
+        //     cout << endl;
+        // }
+
+
+        for(auto o : v) window.draw(o);
+        //cout << v.size() << endl;
+        window.draw(lines);
+        window.display();
+        window.clear();
+    }
+
+
 }
