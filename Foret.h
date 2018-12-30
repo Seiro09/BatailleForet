@@ -12,6 +12,7 @@
 #include <string>
 #include <string.h>
 #include <fstream>
+#include <random>
 
 #define TAILLE_FORET 750
 #define TAILLE_CASE 25

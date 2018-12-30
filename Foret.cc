@@ -1,6 +1,7 @@
 using namespace std;
 #include <iostream>
 #include "Foret.h"
+
 using namespace sf;
 
 Foret::Foret() {
@@ -14,7 +15,6 @@ Foret::Foret() {
 
 Foret::~Foret()  {/*cout << "liste detruite" << endl;*/}
 
-//int** Foret::getTab(){return T;}
 bool Foret::collision(Obstacle& O) {
     for (Obstacle o : this->l){
         // double l; int dx, dy; // l = distance entre les deux obstacles
@@ -48,7 +48,7 @@ void Foret::supprime(int x, int y) {
 void Foret::editerNiveau() {
     int i = 0;
     string s;
-    cout << "Tapez c pour creer (ou s pour supprimer) des obstacles, q sinon ";
+    cout << "Tapez c pour creer un obstacle, (ou s pour supprimer) des obstacles, q sinon ";
     cin >> s;
     while(s != "q") {
         if(s == "c") { // bloc creation d'un obstacle
@@ -131,6 +131,7 @@ void Foret::remplirTableau(){
 
 
 }
+
 void Foret::sauvegarde(string nom) {
     ofstream ofs(nom);
     boost::archive::text_oarchive oa(ofs);
@@ -161,6 +162,19 @@ void Foret::Edition_Nouvelle_Foret(){
         lines[2*NB_CASES+2*i].color = sf::Color::White;
         lines[2*NB_CASES+2*i+1].color = sf::Color::White;
     }
+    Texture arbre;
+    arbre.loadFromFile("./projet_cpp/arbre.png");
+    //joueur.setTexture(&joueurH);
+    arbre.setSmooth(true);
+    Texture buisson;
+    buisson.loadFromFile("./projet_cpp/buisson.png");
+    buisson.setSmooth(true);
+    Texture rocher;
+    rocher.loadFromFile("./projet_cpp/rocher.png");
+    rocher.setSmooth(true);
+    Texture lac;
+    lac.loadFromFile("./projet_cpp/lac.png");
+    lac.setSmooth(true);
     while(window.isOpen()){
         Event event;
         while (window.pollEvent(event)){
@@ -185,9 +199,6 @@ void Foret::Edition_Nouvelle_Foret(){
                             case 4:
                             o = new Lac(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
                             this->ajoute(*o);
-                            break;
-                            case 5:
-                            //Personnage
                             break;
                             default:
                             //case vide
@@ -219,20 +230,20 @@ void Foret::Edition_Nouvelle_Foret(){
                                     this->T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]++;
                                     switch (T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]) {
                                         case 1:
-                                            v[i].setFillColor(Color::Green);
+                                            v[i].setTexture(&arbre);
                                             break;
                                         case 2:
-                                            v[i].setFillColor(Color::Yellow);
+                                            v[i].setTexture(&buisson);
                                             break;
                                         case 3:
-                                            v[i].setFillColor(Color::Red);
+                                            v[i].setTexture(&rocher);
                                             break;
                                         case 4:
-                                            v[i].setFillColor(Color::Blue);
+                                            v[i].setTexture(&lac);
                                             break;
                                         default:
                                             T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]=1;
-                                            v[i].setFillColor(Color::Green);
+                                            v[i].setTexture(&arbre);
                                             break;
                                     }
                                     //v[i].setFillColor(Color::Blue);
@@ -242,7 +253,7 @@ void Foret::Edition_Nouvelle_Foret(){
                 if (!existe){
                     RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
                     r2.setPosition((localPosition.x/TAILLE_CASE)*TAILLE_CASE,(localPosition.y/TAILLE_CASE)*TAILLE_CASE);
-                    r2.setFillColor(Color::Green);
+                    r2.setTexture(&arbre);
                     v.push_back(r2);
                     this->T[localPosition.y/TAILLE_CASE][localPosition.x/TAILLE_CASE]=1;
                 }
@@ -298,6 +309,18 @@ void Foret::Edition_Foret_Existante(){
     this->lecture(fichier);
     this->l.clear();
     vector<RectangleShape> v;
+    Texture arbre;
+    arbre.loadFromFile("./projet_cpp/arbre.png");
+    arbre.setSmooth(true);
+    Texture buisson;
+    buisson.loadFromFile("./projet_cpp/buisson.png");
+    buisson.setSmooth(true);
+    Texture rocher;
+    rocher.loadFromFile("./projet_cpp/rocher.png");
+    rocher.setSmooth(true);
+    Texture lac;
+    lac.loadFromFile("./projet_cpp/lac.png");
+    lac.setSmooth(true);
     VertexArray lines(Lines,4*NB_CASES);
     for (int i = 0; i<NB_CASES; i++){
         lines[2*i].position = sf::Vector2f(i*TAILLE_CASE, 0);
@@ -318,29 +341,26 @@ void Foret::Edition_Foret_Existante(){
             switch (this->T[i][j]) {
                 case 1:
                 r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
-                r2.setFillColor(Color::Green);
+                r2.setTexture(&arbre);
                 v.push_back(r2);
                 break;
                 case 2:
                 //RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
                 r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
-                r2.setFillColor(Color::Yellow);
+                r2.setTexture(&buisson);
                 v.push_back(r2);
                 break;
                 case 3:
                 //RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
                 r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
-                r2.setFillColor(Color::Red);
+                r2.setTexture(&rocher);
                 v.push_back(r2);
                 break;
                 case 4:
                 //RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
                 r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
-                r2.setFillColor(Color::Blue);
+                r2.setTexture(&lac);
                 v.push_back(r2);
-                break;
-                case 5:
-                //Personnage
                 break;
                 default:
                 //case vide
@@ -402,20 +422,20 @@ void Foret::Edition_Foret_Existante(){
                                     this->T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]++;
                                     switch (T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]) {
                                         case 1:
-                                            v[i].setFillColor(Color::Green);
+                                            v[i].setTexture(&arbre);
                                             break;
                                         case 2:
-                                            v[i].setFillColor(Color::Yellow);
+                                            v[i].setTexture(&buisson);
                                             break;
                                         case 3:
-                                            v[i].setFillColor(Color::Red);
+                                            v[i].setTexture(&rocher);
                                             break;
                                         case 4:
-                                            v[i].setFillColor(Color::Blue);
+                                            v[i].setTexture(&lac);
                                             break;
                                         default:
                                             T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]=1;
-                                            v[i].setFillColor(Color::Green);
+                                            v[i].setTexture(&arbre);
                                             break;
                                     }
                                     existe=true;
@@ -424,7 +444,7 @@ void Foret::Edition_Foret_Existante(){
                 if (!existe){
                     RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
                     r2.setPosition((localPosition.x/TAILLE_CASE)*TAILLE_CASE,(localPosition.y/TAILLE_CASE)*TAILLE_CASE);
-                    r2.setFillColor(Color::Green);
+                    r2.setTexture(&arbre);
                     v.push_back(r2);
                     this->T[localPosition.y/TAILLE_CASE][localPosition.x/TAILLE_CASE]=1;
                 }

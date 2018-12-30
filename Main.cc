@@ -1,5 +1,8 @@
 #include <iostream>
 #include "Foret.h"
+#include "Personnage.h"
+#include <random>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 using namespace std;
 using namespace sf;
@@ -16,35 +19,44 @@ void Nouvelle_Partie(RenderWindow& window, Foret f) {
     cin >> fichier;
     f.lecture(fichier);
     vector<RectangleShape> v;
+    Texture arbre;
+    arbre.loadFromFile("./projet_cpp/arbre.png");
+    arbre.setSmooth(true);
+    Texture buisson;
+    buisson.loadFromFile("./projet_cpp/buisson.png");
+    buisson.setSmooth(true);
+    Texture rocher;
+    rocher.loadFromFile("./projet_cpp/rocher.png");
+    rocher.setSmooth(true);
+    Texture lac;
+    lac.loadFromFile("./projet_cpp/lac.png");
+    lac.setSmooth(true);
     RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
     for(int i = 0; i<NB_CASES; i++){
         for(int j = 0; j<NB_CASES; j++){
             switch (f.T[i][j]) {
                 case 1:
                 r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
-                r2.setFillColor(Color::Green);
+                r2.setTexture(&arbre);
                 v.push_back(r2);
                 break;
                 case 2:
                 //RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
                 r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
-                r2.setFillColor(Color::Yellow);
+                r2.setTexture(&buisson);
                 v.push_back(r2);
                 break;
                 case 3:
                 //RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
                 r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
-                r2.setFillColor(Color::Red);
+                r2.setTexture(&rocher);
                 v.push_back(r2);
                 break;
                 case 4:
                 //RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
                 r2.setPosition(i*TAILLE_CASE, j*TAILLE_CASE);
-                r2.setFillColor(Color::Blue);
+                r2.setTexture(&lac);
                 v.push_back(r2);
-                break;
-                case 5:
-                //Personnage
                 break;
                 default:
                 //case vide
@@ -52,6 +64,28 @@ void Nouvelle_Partie(RenderWindow& window, Foret f) {
             }
         }
     }
+    default_random_engine re(time(0));
+    uniform_int_distribution<int> distrib{0,NB_CASES-1};
+    Personnage p1 (distrib(re),distrib(re));
+    RectangleShape joueur(Vector2f(TAILLE_CASE,TAILLE_CASE));
+    joueur.setPosition(p1.getx()*TAILLE_CASE,p1.gety()*TAILLE_CASE);
+    Texture joueurH;
+    joueurH.loadFromFile("./projet_cpp/mario_haut.png");
+    joueur.setTexture(&joueurH);
+    joueurH.setSmooth(true);
+    Texture joueurD;
+    joueurD.loadFromFile("./projet_cpp/mario_droit.png");
+    joueurD.setSmooth(true);
+    Texture joueurB;
+    joueurB.loadFromFile("./projet_cpp/mario_bas.png");
+    joueurB.setSmooth(true);
+    Texture joueurG;
+    joueurG.loadFromFile("./projet_cpp/mario_gauche.png");
+    joueurG.setSmooth(true);
+    int portee=0;
+    int angle=0;
+    int force=0;
+    CircleShape zone;
     while(window.isOpen()){
         Event event;
         while (window.pollEvent(event)){
@@ -59,50 +93,68 @@ void Nouvelle_Partie(RenderWindow& window, Foret f) {
                 case Event::Closed:
                     window.close();
                     break;
+                case Event::MouseWheelScrolled:
+                    if (event.mouseWheelScroll.delta>0) angle+=1;
+                    if (event.mouseWheelScroll.delta<0) angle-=1;
+                    if (angle<0) angle=0;
+                    if (angle>90) angle=90;
+                    // cout << angle << endl;
+                    break;
+                case Event::MouseMoved:
+                    cout << event.mouseMove.x << " " <<event.mouseMove.y << endl;
+                    zone.setPosition(Vector2f(event.mouseMove.x,event.mouseMove.y));
+                    zone.setOrigin(Vector2f(zone.getRadius(),zone.getRadius()));
+                    break;
             }
+        }
+        joueur.setPosition(p1.getx()*TAILLE_CASE,p1.gety()*TAILLE_CASE);
+        if (Keyboard::isKeyPressed(Keyboard::Left)) {
+            if (p1.getx()>0 && f.T[p1.getx()-1][p1.gety()]==0)
+                p1.setx(p1.getx()-1);
+            // cout << p1.getx() << " " << p1.gety() << endl;
+            joueur.setTexture(&joueurG);
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Right)) {
+            if (p1.getx()<NB_CASES-1 && f.T[p1.getx()+1][p1.gety()]==0)
+                p1.setx(p1.getx()+1);
+            // cout << p1.getx() << " " << p1.gety() << endl;
+            joueur.setTexture(&joueurD);
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Up)) {
+            if (p1.gety()>0 && f.T[p1.getx()][p1.gety()-1]==0)
+                p1.sety(p1.gety()-1);
+            // cout << p1.getx() << " " << p1.gety() << endl;
+            joueur.setTexture(&joueurH);
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Down)) {
+            if (p1.gety()<NB_CASES-1 && f.T[p1.getx()][p1.gety()+1]==0)
+                p1.sety(p1.gety()+1);
+            // cout << p1.getx() << " " << p1.gety() << endl;
+            joueur.setTexture(&joueurB);
+        }
+        if (Mouse::isButtonPressed(Mouse::Left)){
+            sf::Vector2i localPosition = sf::Mouse::getPosition(window);
+            for(i=0;i<portee;i++){
+                
+            }
+        }
+        if (Mouse::isButtonPressed(Mouse::Right)){
+            force+=1;
+            if (force>5) force=1;
+            cout << force << endl;
+        }
+        if (Mouse::isButtonPressed(Mouse::Middle)){
+            portee+=1;
+            if (portee>5) portee=1;
+            cout << portee << endl;
+            zone.setRadius(portee*TAILLE_CASE/2.0);
         }
         window.clear();
         for(auto o : v) window.draw(o);
+        window.draw(joueur);
+        window.draw(zone);
         window.display();
     }
-}
-
-void Disclaimer_Edition(){
-    RenderWindow window(VideoMode(TAILLE_FORET,200),
-     "Edition Foret");
-     double taille_bouton_x = 60;
-     double taille_bouton_y = 20;
-     Font police;
-     police.loadFromFile("arial.ttf");
-     Text text1;
-     text1.setFont(police);
-     text1.setString("Charger une foret existante ?");
-     FloatRect bound = text1.getLocalBounds();
-     text1.setOrigin(Vector2f(bound.width/2 + bound.left, bound.height/2 + bound.top));
-     text1.setPosition(TAILLE_FORET/2, bound.height);
-     text1.setCharacterSize(35);
-
-     RectangleShape shapeO(Vector2f(taille_bouton_x,taille_bouton_y));
-     shapeO.setOrigin(taille_bouton_x/2.f,taille_bouton_y/2.f);
-     shapeO.setPosition(TAILLE_FORET/4.f,2*200/3.f);
-     Texture texture1;
-     texture1.loadFromFile("boutons/NouvellePartie.png");
-     shapeO.setTexture(&texture1);
-     texture1.setSmooth(true);
-
-    while(window.isOpen()){
-        Event event;
-        while (window.pollEvent(event)){
-            switch (event.type) {
-                case Event::Closed:
-                    window.close();
-                    break;
-            }
-        }
-        window.clear();
-        window.draw(shapeO);
-        window.display();
-}
 }
 
 void Regles_du_Jeu(){
@@ -167,6 +219,24 @@ void Regles_du_Jeu(){
         rules.display();
     }
 }
+
+// void jouer(int** T){
+//     for (int i = 0; i<NB_CASES; i++){
+//         for (int j = 0; j<NB_CASES; j++){
+//             cout << T[i][j];
+//         }
+//         cout << endl;
+//     }
+//     default_random_engine re(time(0));
+//     uniform_int_distribution<int> distrib{0,NB_CASES-1};
+//     Personnage p1 (distrib(re),distrib(re));
+//     T[p1.getx()][p1.gety()]=5;
+//     char reponse;
+//     while(reponse != "n" || reponse != "N"){
+//         cout << "Voulez-vous vous déplacer ? ";
+//         cin << reponse;
+//     }
+// }
 
 int main() {
     string fichier;
@@ -247,6 +317,9 @@ int main() {
             if (Mouse::isButtonPressed(Mouse::Left)){
                 Nouvelle_Partie(window,f);
                 //montrer les niveaux déja crées
+                // window.close();
+                // f.lecture("Test3.txt");
+                // jouer(f.T);
             }
         }
         else if (shapeEF.getGlobalBounds().contains(window.mapPixelToCoords(Mouse::getPosition(window)))){

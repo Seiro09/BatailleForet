@@ -21,6 +21,11 @@ Point* Obstacle::getCentre(){return this->centre;}
 int Obstacle::getPV(){return this->PV;}
 string Obstacle::getNom() {return this->nom;}
 
+// void Obstacle::setHauteur(){return this->hauteur;}
+// void Obstacle::setCentre(){return this->centre;}
+void Obstacle::setPV(int PV){this->PV=PV;}
+//void Obstacle::setNom() {return this->nom;}
+
 void Obstacle::print(){
     cout << this->getNom() << " : ";
     cout << "Hauteur : " << this->getHauteur();
