@@ -1,5 +1,3 @@
-/*rajouter les ronces : le perso avance moins vite*/
-
 #ifndef OBSTACLE_H
 #define OBSTACLE_H
 
@@ -26,5 +24,6 @@ public:
     virtual Point* getCentre();
     virtual int getPV();
     virtual string getNom();
+    virtual void setPV(int);
 };
 #endif

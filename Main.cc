@@ -4,6 +4,7 @@
 #include <random>
 #include <cmath>
 #include <SFML/Graphics.hpp>
+
 using namespace std;
 using namespace sf;
 
@@ -12,24 +13,27 @@ using namespace sf;
 //Découper le code (pas mon travail)
 //Créer l'interface de jeu juste après les menus
 
-void Nouvelle_Partie(RenderWindow& window, Foret f) {
-    window.clear();
-    window.create(VideoMode(TAILLE_FORET,TAILLE_FORET), "Nouvelle Partie");
+void Nouvelle_Partie(Foret f) {
+    //window.clear();
+    RenderWindow new_game(VideoMode(TAILLE_FORET, TAILLE_FORET),
+    "Nouvelle Partie", Style::Close);
+    new_game.setFramerateLimit(60);
+    new_game.setKeyRepeatEnabled(false);
     string fichier;
     cin >> fichier;
     f.lecture(fichier);
     vector<RectangleShape> v;
     Texture arbre;
-    arbre.loadFromFile("./projet_cpp/arbre.png");
+    arbre.loadFromFile("./sans_fond/arbre.png");
     arbre.setSmooth(true);
     Texture buisson;
-    buisson.loadFromFile("./projet_cpp/buisson.png");
+    buisson.loadFromFile("./sans_fond/buisson.png");
     buisson.setSmooth(true);
     Texture rocher;
-    rocher.loadFromFile("./projet_cpp/rocher.png");
+    rocher.loadFromFile("./sans_fond/rocher.png");
     rocher.setSmooth(true);
     Texture lac;
-    lac.loadFromFile("./projet_cpp/lac.png");
+    lac.loadFromFile("./sans_fond/lac.png");
     lac.setSmooth(true);
     RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
     for(int i = 0; i<NB_CASES; i++){
@@ -66,94 +70,178 @@ void Nouvelle_Partie(RenderWindow& window, Foret f) {
     }
     default_random_engine re(time(0));
     uniform_int_distribution<int> distrib{0,NB_CASES-1};
-    Personnage p1 (distrib(re),distrib(re));
+    int a = distrib(re);
+    int b = distrib(re);
+    while (f.T[a][b]!=0){
+        a = distrib(re);
+        b = distrib(re);
+    }
+    Personnage p1 (a,b);
     RectangleShape joueur(Vector2f(TAILLE_CASE,TAILLE_CASE));
     joueur.setPosition(p1.getx()*TAILLE_CASE,p1.gety()*TAILLE_CASE);
+    a = distrib(re);
+    b = distrib(re);
+    while (f.T[a][b]!=0){
+        a = distrib(re);
+        b = distrib(re);
+    }
+    Personnage p2 (a,b);
+    RectangleShape joueur2(Vector2f(TAILLE_CASE,TAILLE_CASE));
+    joueur2.setPosition(p2.getx()*TAILLE_CASE,p2.gety()*TAILLE_CASE);
+    RectangleShape fond(Vector2f(TAILLE_FORET,TAILLE_FORET));
+    fond.setOrigin(TAILLE_FORET/2.f,TAILLE_FORET/2.f);
+    fond.setPosition(TAILLE_FORET/2.f,TAILLE_FORET/2.f);
+    Texture textureF;
+    textureF.loadFromFile("foret4.png");
+    fond.setTexture(&textureF);
+    textureF.setSmooth(true);
     Texture joueurH;
-    joueurH.loadFromFile("./projet_cpp/mario_haut.png");
+    joueurH.loadFromFile("./sans_fond/mario_haut.png");
     joueur.setTexture(&joueurH);
     joueurH.setSmooth(true);
     Texture joueurD;
-    joueurD.loadFromFile("./projet_cpp/mario_droit.png");
+    joueurD.loadFromFile("./sans_fond/mario_droit.png");
     joueurD.setSmooth(true);
     Texture joueurB;
-    joueurB.loadFromFile("./projet_cpp/mario_bas.png");
+    joueurB.loadFromFile("./sans_fond/mario_bas.png");
     joueurB.setSmooth(true);
     Texture joueurG;
-    joueurG.loadFromFile("./projet_cpp/mario_gauche.png");
+    joueurG.loadFromFile("./sans_fond/mario_gauche.png");
     joueurG.setSmooth(true);
+    Texture joueur2H;
+    joueur2H.loadFromFile("./sans_fond/sonic_haut.png");
+    joueur2.setTexture(&joueur2H);
+    joueur2H.setSmooth(true);
+    Texture joueur2D;
+    joueur2D.loadFromFile("./sans_fond/sonic_droit.png");
+    joueur2D.setSmooth(true);
+    Texture joueur2B;
+    joueur2B.loadFromFile("./sans_fond/sonic_bas.png");
+    joueur2B.setSmooth(true);
+    Texture joueur2G;
+    joueur2G.loadFromFile("./sans_fond/sonic_gauche.png");
+    joueur2G.setSmooth(true);
     int portee=0;
     int angle=0;
     int force=0;
+    bool tour_joueur_1 = true;
     CircleShape zone;
-    while(window.isOpen()){
+    while(new_game.isOpen()){
         Event event;
-        while (window.pollEvent(event)){
+        while (new_game.pollEvent(event)){
             switch (event.type) {
                 case Event::Closed:
-                    window.close();
+                    new_game.close();
                     break;
                 case Event::MouseWheelScrolled:
-                    if (event.mouseWheelScroll.delta>0) angle+=1;
-                    if (event.mouseWheelScroll.delta<0) angle-=1;
-                    if (angle<0) angle=0;
-                    if (angle>90) angle=90;
-                    // cout << angle << endl;
+                    if (event.mouseWheelScroll.delta>0) portee+=1;
+                    if (event.mouseWheelScroll.delta<0) portee-=1;
+                    if (portee<0) portee=0;
+                    if (portee>5) portee=5;
+                    zone.setRadius(portee*TAILLE_CASE/2.0);
                     break;
                 case Event::MouseMoved:
-                    cout << event.mouseMove.x << " " <<event.mouseMove.y << endl;
                     zone.setPosition(Vector2f(event.mouseMove.x,event.mouseMove.y));
                     zone.setOrigin(Vector2f(zone.getRadius(),zone.getRadius()));
+                    break;
+                case Event::MouseButtonPressed:
+                    if (event.mouseButton.button == Mouse::Left){
+                        int posdepx = event.mouseButton.x/TAILLE_CASE*TAILLE_CASE-(portee/2)*TAILLE_CASE;
+                        int posdepy = event.mouseButton.y/TAILLE_CASE*TAILLE_CASE-(portee/2)*TAILLE_CASE;
+                        for (int departx=posdepx;
+                            departx < posdepx+portee*TAILLE_CASE;
+                            departx = departx+TAILLE_CASE){
+                            for (int departy=posdepy;
+                                departy < posdepy+portee*TAILLE_CASE;
+                                departy = departy+TAILLE_CASE){
+                                    if (tour_joueur_1){
+                                        if (departx/TAILLE_CASE == p2.getx() && departy/TAILLE_CASE==p2.gety()){
+                                            f.~Foret();
+                                            p1.~Personnage();
+                                            p2.~Personnage();
+                                            new_game.close();
+                                            cout << "Joueur 1 a gagné" << endl;
+                                        }
+                                    }
+                                    else {
+                                        if (departx/TAILLE_CASE == p1.getx() && departy/TAILLE_CASE==p1.gety()){
+                                            f.~Foret();
+                                            p1.~Personnage();
+                                            p2.~Personnage();
+                                            new_game.close();
+                                            cout << "Joueur 2 a gagné" << endl;
+                                        }
+                                    }
+                                    f.supprime(departx,departy);
+                                    for(int i = 0; i<v.size();i++){
+                                            if (v[i].getPosition()==Vector2f(departx,departy)){
+                                            Vector2f pos = v[i].getPosition();
+                                            f.T[(int)pos.x/TAILLE_CASE][(int)pos.y/TAILLE_CASE]=0;
+                                            v.erase(v.begin()+i);
+                                        }
+                                    }
+                                }
+                            }
+                        if (tour_joueur_1) tour_joueur_1 = false;
+                        else tour_joueur_1 = true;
+                    }
+                    break;
+                    case Event::KeyPressed:
+                    if (event.key.code == Keyboard::Left) {
+                        if (tour_joueur_1){
+                            if (p1.getx()>0 && f.T[p1.getx()-1][p1.gety()]==0) p1.setx(p1.getx()-1);
+                            joueur.setTexture(&joueurG);
+                        }
+                        else {
+                            if (p2.getx()>0 && f.T[p2.getx()-1][p2.gety()]==0) p2.setx(p2.getx()-1);
+                            joueur2.setTexture(&joueur2G);
+                        }
+                    }
+                    if (event.key.code == Keyboard::Right) {
+                        if (tour_joueur_1)
+                        {
+                            if (p1.getx()<NB_CASES-1 && f.T[p1.getx()+1][p1.gety()]==0) p1.setx(p1.getx()+1);
+                            joueur.setTexture(&joueurD);
+                        }
+                        else{
+                            if (p2.getx()<NB_CASES-1 && f.T[p2.getx()+1][p2.gety()]==0) p2.setx(p2.getx()+1);
+                            joueur2.setTexture(&joueur2D);
+                        }
+                    }
+                    if (event.key.code == Keyboard::Up) {
+                        if (tour_joueur_1)
+                        {
+                            if (p1.gety()>0 && f.T[p1.getx()][p1.gety()-1]==0) p1.sety(p1.gety()-1);
+                            joueur.setTexture(&joueurH);
+                        }
+                        else{
+                            if (p2.gety()>0 && f.T[p2.getx()][p2.gety()-1]==0) p2.sety(p2.gety()-1);
+                            joueur2.setTexture(&joueur2H);
+                        }
+                    }
+                    if (event.key.code == Keyboard::Down) {
+                        if (tour_joueur_1)
+                        {
+                            if (p1.gety()<NB_CASES-1 && f.T[p1.getx()][p1.gety()+1]==0) p1.sety(p1.gety()+1);
+                            joueur.setTexture(&joueurB);
+                        }
+                        else{
+                            if (p2.gety()<NB_CASES-1 && f.T[p2.getx()][p2.gety()+1]==0) p2.sety(p2.gety()+1);
+                            joueur2.setTexture(&joueur2B);
+                        }
+                    }
                     break;
             }
         }
         joueur.setPosition(p1.getx()*TAILLE_CASE,p1.gety()*TAILLE_CASE);
-        if (Keyboard::isKeyPressed(Keyboard::Left)) {
-            if (p1.getx()>0 && f.T[p1.getx()-1][p1.gety()]==0)
-                p1.setx(p1.getx()-1);
-            // cout << p1.getx() << " " << p1.gety() << endl;
-            joueur.setTexture(&joueurG);
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Right)) {
-            if (p1.getx()<NB_CASES-1 && f.T[p1.getx()+1][p1.gety()]==0)
-                p1.setx(p1.getx()+1);
-            // cout << p1.getx() << " " << p1.gety() << endl;
-            joueur.setTexture(&joueurD);
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Up)) {
-            if (p1.gety()>0 && f.T[p1.getx()][p1.gety()-1]==0)
-                p1.sety(p1.gety()-1);
-            // cout << p1.getx() << " " << p1.gety() << endl;
-            joueur.setTexture(&joueurH);
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Down)) {
-            if (p1.gety()<NB_CASES-1 && f.T[p1.getx()][p1.gety()+1]==0)
-                p1.sety(p1.gety()+1);
-            // cout << p1.getx() << " " << p1.gety() << endl;
-            joueur.setTexture(&joueurB);
-        }
-        if (Mouse::isButtonPressed(Mouse::Left)){
-            sf::Vector2i localPosition = sf::Mouse::getPosition(window);
-            for(i=0;i<portee;i++){
-                
-            }
-        }
-        if (Mouse::isButtonPressed(Mouse::Right)){
-            force+=1;
-            if (force>5) force=1;
-            cout << force << endl;
-        }
-        if (Mouse::isButtonPressed(Mouse::Middle)){
-            portee+=1;
-            if (portee>5) portee=1;
-            cout << portee << endl;
-            zone.setRadius(portee*TAILLE_CASE/2.0);
-        }
-        window.clear();
-        for(auto o : v) window.draw(o);
-        window.draw(joueur);
-        window.draw(zone);
-        window.display();
+        joueur2.setPosition(p2.getx()*TAILLE_CASE,p2.gety()*TAILLE_CASE);
+        new_game.clear();
+        new_game.draw(fond);
+        for(auto o : v) new_game.draw(o);
+        if (tour_joueur_1) new_game.draw(joueur);
+        else new_game.draw(joueur2);
+        new_game.draw(zone);
+        new_game.display();
     }
 }
 
@@ -210,7 +298,6 @@ void Regles_du_Jeu(){
             }
 
         }
-        //Ecrire les regles
         rules.draw(text1);
         rules.draw(regles1);
         rules.draw(regles2);
@@ -220,25 +307,7 @@ void Regles_du_Jeu(){
     }
 }
 
-// void jouer(int** T){
-//     for (int i = 0; i<NB_CASES; i++){
-//         for (int j = 0; j<NB_CASES; j++){
-//             cout << T[i][j];
-//         }
-//         cout << endl;
-//     }
-//     default_random_engine re(time(0));
-//     uniform_int_distribution<int> distrib{0,NB_CASES-1};
-//     Personnage p1 (distrib(re),distrib(re));
-//     T[p1.getx()][p1.gety()]=5;
-//     char reponse;
-//     while(reponse != "n" || reponse != "N"){
-//         cout << "Voulez-vous vous déplacer ? ";
-//         cin << reponse;
-//     }
-// }
-
-int main() {
+void Menu_Principal(){
     string fichier;
     Foret f;
     double taille_bouton_x = 300;
@@ -315,7 +384,7 @@ int main() {
             shapeNP.setTexture(&texture1);
             texture1.setSmooth(true);
             if (Mouse::isButtonPressed(Mouse::Left)){
-                Nouvelle_Partie(window,f);
+                Nouvelle_Partie(f);
                 //montrer les niveaux déja crées
                 // window.close();
                 // f.lecture("Test3.txt");
@@ -382,6 +451,9 @@ int main() {
         window.draw(shapeQJ);
         window.display();
     }
+}
+int main() {
+    Menu_Principal();
     // Foret f;
     // string fichier;
     // f.editerNiveau();

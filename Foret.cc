@@ -162,139 +162,132 @@ void Foret::Edition_Nouvelle_Foret(){
         lines[2*NB_CASES+2*i].color = sf::Color::White;
         lines[2*NB_CASES+2*i+1].color = sf::Color::White;
     }
+    RectangleShape fond(Vector2f(TAILLE_FORET,TAILLE_FORET));
+    fond.setOrigin(TAILLE_FORET/2.f,TAILLE_FORET/2.f);
+    fond.setPosition(TAILLE_FORET/2.f,TAILLE_FORET/2.f);
+    Texture textureF;
+    textureF.loadFromFile("foret4.png");
+    fond.setTexture(&textureF);
+    textureF.setSmooth(true);
     Texture arbre;
-    arbre.loadFromFile("./projet_cpp/arbre.png");
+    arbre.loadFromFile("./sans_fond/arbre.png");
     //joueur.setTexture(&joueurH);
     arbre.setSmooth(true);
     Texture buisson;
-    buisson.loadFromFile("./projet_cpp/buisson.png");
+    buisson.loadFromFile("./sans_fond/buisson.png");
     buisson.setSmooth(true);
     Texture rocher;
-    rocher.loadFromFile("./projet_cpp/rocher.png");
+    rocher.loadFromFile("./sans_fond/rocher.png");
     rocher.setSmooth(true);
     Texture lac;
-    lac.loadFromFile("./projet_cpp/lac.png");
+    lac.loadFromFile("./sans_fond/lac.png");
     lac.setSmooth(true);
     while(window.isOpen()){
         Event event;
         while (window.pollEvent(event)){
             switch (event.type) {
                 case Event::Closed:
-                Obstacle* o;
-                for(int i = 0; i<NB_CASES; i++){
-                    for(int j = 0; j<NB_CASES; j++){
-                        switch (this->T[i][j]) {
-                            case 1:
-                            o = new Arbre(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
-                            this->ajoute(*o);
-                            break;
-                            case 2:
-                            o = new Buisson(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
-                            this->ajoute(*o);
-                            break;
-                            case 3:
-                            o = new Rocher(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
-                            this->ajoute(*o);
-                            break;
-                            case 4:
-                            o = new Lac(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
-                            this->ajoute(*o);
-                            break;
-                            default:
-                            //case vide
-                            break;
+                    Obstacle* o;
+                    for(int i = 0; i<NB_CASES; i++){
+                        for(int j = 0; j<NB_CASES; j++){
+                            switch (this->T[i][j]) {
+                                case 1:
+                                o = new Arbre(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
+                                this->ajoute(*o);
+                                break;
+                                case 2:
+                                o = new Buisson(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
+                                this->ajoute(*o);
+                                break;
+                                case 3:
+                                o = new Rocher(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
+                                this->ajoute(*o);
+                                break;
+                                case 4:
+                                o = new Lac(5, i*TAILLE_CASE, j*TAILLE_CASE, 20);
+                                this->ajoute(*o);
+                                break;
+                                default:
+                                //case vide
+                                break;
+                            }
                         }
                     }
-                }
-                if (!(this->l.empty())) {
-                    string fichier;
-                    //this->afficher();
-                    cin >> fichier;
-                    if (!cin) window.close();
-                    this->sauvegarde(fichier);
-                }
+                    if (!(this->l.empty())) {
+                        string fichier;
+                        //this->afficher();
+                        cin >> fichier;
+                        if (!cin) window.close();
+                        this->sauvegarde(fichier);
+                    }
                     window.close();
                     break;
-            }
-            if (Mouse::isButtonPressed(Mouse::Left) && window.hasFocus()) {
-                bool existe = false;
-                sf::Vector2i localPosition = sf::Mouse::getPosition(window);
-                //cout << localPosition.x << " "<< localPosition.y << endl;
-                if (localPosition.x < TAILLE_FORET && localPosition.x > 0 &&
-                    localPosition.y < TAILLE_FORET && localPosition.y > 0) {
+                case Event::MouseButtonPressed:
+                    if (event.mouseButton.button == Mouse::Left) {
+                        bool existe = false;
+                    //sf::Vector2i localPosition = sf::Mouse::getPosition(window);
+                    //cout << localPosition.x << " "<< localPosition.y << endl;
                         for(int i = 0; i<v.size();i++){
                             if (v[i].getPosition()==
-                            Vector2f(localPosition.x/TAILLE_CASE*TAILLE_CASE,
-                                localPosition.y/TAILLE_CASE*TAILLE_CASE)){
+                            Vector2f(event.mouseButton.x/TAILLE_CASE*TAILLE_CASE,
+                                event.mouseButton.y/TAILLE_CASE*TAILLE_CASE)){
                                     Vector2f pos = v[i].getPosition();
                                     this->T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]++;
                                     switch (T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]) {
                                         case 1:
-                                            v[i].setTexture(&arbre);
-                                            break;
+                                        v[i].setTexture(&arbre);
+                                        break;
                                         case 2:
-                                            v[i].setTexture(&buisson);
-                                            break;
+                                        v[i].setTexture(&buisson);
+                                        break;
                                         case 3:
-                                            v[i].setTexture(&rocher);
-                                            break;
+                                        v[i].setTexture(&rocher);
+                                        break;
                                         case 4:
-                                            v[i].setTexture(&lac);
-                                            break;
+                                        v[i].setTexture(&lac);
+                                        break;
                                         default:
-                                            T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]=1;
-                                            v[i].setTexture(&arbre);
-                                            break;
+                                        T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]=1;
+                                        v[i].setTexture(&arbre);
+                                        break;
                                     }
-                                    //v[i].setFillColor(Color::Blue);
                                     existe=true;
                                 }
                             }
-                if (!existe){
-                    RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
-                    r2.setPosition((localPosition.x/TAILLE_CASE)*TAILLE_CASE,(localPosition.y/TAILLE_CASE)*TAILLE_CASE);
-                    r2.setTexture(&arbre);
-                    v.push_back(r2);
-                    this->T[localPosition.y/TAILLE_CASE][localPosition.x/TAILLE_CASE]=1;
-                }
-            }
-            }
-            if (Mouse::isButtonPressed(Mouse::Middle) && window.hasFocus()){
-                v.clear();
-                for (int i = 0; i<NB_CASES; i++){
-                    for (int j = 0; j<NB_CASES; j++){
-                        T[i][j]=0;
-                    }
-                }
-                // sf::Vector2i localPosition = sf::Mouse::getPosition(window);
-                // this->T[localPosition.x/TAILLE_CASE][localPosition.y/TAILLE_CASE]=0;
-            }
-            if (Mouse::isButtonPressed(Mouse::Right)) {
-                sf::Vector2i localPosition = sf::Mouse::getPosition(window);
-                if (localPosition.x < TAILLE_FORET && localPosition.x > 0 &&
-                    localPosition.y < TAILLE_FORET && localPosition.y > 0) {
-                        for(int i = 0; i<v.size();i++){
-                            if (v[i].getPosition()==
-                            Vector2f(localPosition.x/TAILLE_CASE*TAILLE_CASE,
-                                localPosition.y/TAILLE_CASE*TAILLE_CASE)){
-                                    Vector2f pos = v[i].getPosition();
-                                    this->T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]=0;
-                                    v.erase(v.begin()+i);
-                                }
+                            if (!existe){
+                                RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
+                                r2.setPosition((event.mouseButton.x/TAILLE_CASE)*TAILLE_CASE,(event.mouseButton.y/TAILLE_CASE)*TAILLE_CASE);
+                                r2.setTexture(&arbre);
+                                v.push_back(r2);
+                                this->T[event.mouseButton.y/TAILLE_CASE][event.mouseButton.x/TAILLE_CASE]=1;
+                            }
+
+                        }
+                    if (event.mouseButton.button == Mouse::Middle){
+                        v.clear();
+                        for (int i = 0; i<NB_CASES; i++){
+                            for (int j = 0; j<NB_CASES; j++){
+                                T[i][j]=0;
                             }
                         }
+                    }
+                    if (event.mouseButton.button == Mouse::Right) {
+                            for(int i = 0; i<v.size();i++){
+                                if (v[i].getPosition()==
+                                Vector2f(event.mouseButton.x/TAILLE_CASE*TAILLE_CASE,
+                                    event.mouseButton.y/TAILLE_CASE*TAILLE_CASE)){
+                                        Vector2f pos = v[i].getPosition();
+                                        this->T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]=0;
+                                        v.erase(v.begin()+i);
+                                        break;
+                                    }
+                                }
+                            }
+                    break;
             }
         }
-        // for (int i = 0; i<NB_CASES; i++){
-        //     for (int j = 0; j<NB_CASES; j++){
-        //         cout << T[i][j];
-        //     }
-        //     cout << endl;
-        // }
-
-
+        window.draw(fond);
         for(auto o : v) window.draw(o);
-        //cout << v.size() << endl;
         window.draw(lines);
         window.display();
         window.clear();
@@ -309,17 +302,24 @@ void Foret::Edition_Foret_Existante(){
     this->lecture(fichier);
     this->l.clear();
     vector<RectangleShape> v;
+    RectangleShape fond(Vector2f(TAILLE_FORET,TAILLE_FORET));
+    fond.setOrigin(TAILLE_FORET/2.f,TAILLE_FORET/2.f);
+    fond.setPosition(TAILLE_FORET/2.f,TAILLE_FORET/2.f);
+    Texture textureF;
+    textureF.loadFromFile("foret4.png");
+    fond.setTexture(&textureF);
+    textureF.setSmooth(true);
     Texture arbre;
-    arbre.loadFromFile("./projet_cpp/arbre.png");
+    arbre.loadFromFile("./sans_fond/arbre.png");
     arbre.setSmooth(true);
     Texture buisson;
-    buisson.loadFromFile("./projet_cpp/buisson.png");
+    buisson.loadFromFile("./sans_fond/buisson.png");
     buisson.setSmooth(true);
     Texture rocher;
-    rocher.loadFromFile("./projet_cpp/rocher.png");
+    rocher.loadFromFile("./sans_fond/rocher.png");
     rocher.setSmooth(true);
     Texture lac;
-    lac.loadFromFile("./projet_cpp/lac.png");
+    lac.loadFromFile("./sans_fond/lac.png");
     lac.setSmooth(true);
     VertexArray lines(Lines,4*NB_CASES);
     for (int i = 0; i<NB_CASES; i++){
@@ -405,87 +405,76 @@ void Foret::Edition_Foret_Existante(){
                 if (!(this->l.empty())) {
                     this->sauvegarde(fichier);
                 }
-                    window.close();
-                    break;
-            }
-            if (Mouse::isButtonPressed(Mouse::Left) && window.hasFocus()) {
-                bool existe = false;
-                sf::Vector2i localPosition = sf::Mouse::getPosition(window);
-                //cout << localPosition.x << " "<< localPosition.y << endl;
-                if (localPosition.x < TAILLE_FORET && localPosition.x > 0 &&
-                    localPosition.y < TAILLE_FORET && localPosition.y > 0) {
-                        for(int i = 0; i<v.size();i++){
-                            if (v[i].getPosition()==
-                            Vector2f(localPosition.x/TAILLE_CASE*TAILLE_CASE,
-                                localPosition.y/TAILLE_CASE*TAILLE_CASE)){
-                                    Vector2f pos = v[i].getPosition();
-                                    this->T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]++;
-                                    switch (T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]) {
-                                        case 1:
+                window.close();
+                break;
+                case Event::MouseButtonPressed:
+                if (event.mouseButton.button == Mouse::Left) {
+                    bool existe = false;
+                    //sf::Vector2i localPosition = sf::Mouse::getPosition(window);
+                    //cout << localPosition.x << " "<< localPosition.y << endl;
+                            for(int i = 0; i<v.size();i++){
+                                if (v[i].getPosition()==
+                                Vector2f(event.mouseButton.x/TAILLE_CASE*TAILLE_CASE,
+                                    event.mouseButton.y/TAILLE_CASE*TAILLE_CASE)){
+                                        Vector2f pos = v[i].getPosition();
+                                        this->T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]++;
+                                        switch (T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]) {
+                                            case 1:
                                             v[i].setTexture(&arbre);
                                             break;
-                                        case 2:
+                                            case 2:
                                             v[i].setTexture(&buisson);
                                             break;
-                                        case 3:
+                                            case 3:
                                             v[i].setTexture(&rocher);
                                             break;
-                                        case 4:
+                                            case 4:
                                             v[i].setTexture(&lac);
                                             break;
-                                        default:
+                                            default:
                                             T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]=1;
                                             v[i].setTexture(&arbre);
                                             break;
+                                        }
+                                        existe=true;
                                     }
-                                    existe=true;
                                 }
-                            }
-                if (!existe){
-                    RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
-                    r2.setPosition((localPosition.x/TAILLE_CASE)*TAILLE_CASE,(localPosition.y/TAILLE_CASE)*TAILLE_CASE);
-                    r2.setTexture(&arbre);
-                    v.push_back(r2);
-                    this->T[localPosition.y/TAILLE_CASE][localPosition.x/TAILLE_CASE]=1;
-                }
-            }
-            }
-            if (Mouse::isButtonPressed(Mouse::Middle) && window.hasFocus()){
-                v.clear();
-                for (int i = 0; i<NB_CASES; i++){
-                    for (int j = 0; j<NB_CASES; j++){
-                        T[i][j]=0;
-                    }
-                }
-                // sf::Vector2i localPosition = sf::Mouse::getPosition(window);
-                // this->T[localPosition.x/TAILLE_CASE][localPosition.y/TAILLE_CASE]=0;
-            }
-            if (Mouse::isButtonPressed(Mouse::Right)) {
-                sf::Vector2i localPosition = sf::Mouse::getPosition(window);
-                if (localPosition.x < TAILLE_FORET && localPosition.x > 0 &&
-                    localPosition.y < TAILLE_FORET && localPosition.y > 0) {
-                        for(int i = 0; i<v.size();i++){
-                            if (v[i].getPosition()==
-                            Vector2f(localPosition.x/TAILLE_CASE*TAILLE_CASE,
-                                localPosition.y/TAILLE_CASE*TAILLE_CASE)){
-                                    Vector2f pos = v[i].getPosition();
-                                    this->T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]=0;
-                                    v.erase(v.begin()+i);
+                                if (!existe){
+                                    RectangleShape r2(Vector2f(TAILLE_CASE,TAILLE_CASE));
+                                    r2.setPosition((event.mouseButton.x/TAILLE_CASE)*TAILLE_CASE,(event.mouseButton.y/TAILLE_CASE)*TAILLE_CASE);
+                                    r2.setTexture(&arbre);
+                                    v.push_back(r2);
+                                    this->T[event.mouseButton.y/TAILLE_CASE][event.mouseButton.x/TAILLE_CASE]=1;
                                 }
-                            }
+
                         }
+                        if (event.mouseButton.button == Mouse::Middle){
+                            v.clear();
+                            for (int i = 0; i<NB_CASES; i++){
+                                for (int j = 0; j<NB_CASES; j++){
+                                    T[i][j]=0;
+                                }
+                            }
+                            // sf::Vector2i localPosition = sf::Mouse::getPosition(window);
+                            // this->T[localPosition.x/TAILLE_CASE][localPosition.y/TAILLE_CASE]=0;
+                        }
+                        if (event.mouseButton.button == Mouse::Right) {
+                                    for(int i = 0; i<v.size();i++){
+                                        if (v[i].getPosition()==
+                                        Vector2f(event.mouseButton.x/TAILLE_CASE*TAILLE_CASE,
+                                            event.mouseButton.y/TAILLE_CASE*TAILLE_CASE)){
+                                                Vector2f pos = v[i].getPosition();
+                                                this->T[(int)pos.y/TAILLE_CASE][(int)pos.x/TAILLE_CASE]=0;
+                                                v.erase(v.begin()+i);
+                                                break;
+                                            }
+                                        }
+
+                                }
             }
         }
-        // for (int i = 0; i<NB_CASES; i++){
-        //     for (int j = 0; j<NB_CASES; j++){
-        //         cout << T[i][j];
-        //     }
-        //     cout << endl;
-        // }
-
-
+        window.draw(fond);
         for(auto o : v) window.draw(o);
-        //cout << v.size() << endl;
         window.draw(lines);
         window.display();
         window.clear();
