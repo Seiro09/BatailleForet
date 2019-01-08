@@ -156,18 +156,14 @@ void Nouvelle_Partie(Foret f) {
                                 departy = departy+TAILLE_CASE){
                                     if (tour_joueur_1){
                                         if (departx/TAILLE_CASE == p2.getx() && departy/TAILLE_CASE==p2.gety()){
-                                            f.~Foret();
-                                            p1.~Personnage();
-                                            p2.~Personnage();
+                                            
                                             new_game.close();
                                             cout << "Joueur 1 a gagné" << endl;
                                         }
                                     }
                                     else {
                                         if (departx/TAILLE_CASE == p1.getx() && departy/TAILLE_CASE==p1.gety()){
-                                            f.~Foret();
-                                            p1.~Personnage();
-                                            p2.~Personnage();
+
                                             new_game.close();
                                             cout << "Joueur 2 a gagné" << endl;
                                         }
